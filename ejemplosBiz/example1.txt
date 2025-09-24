@@ -1,0 +1,8 @@
+# Reglas de ejemplo
+rule "Envío gratis" when carrito.total >= 100000 then envio = 0
+
+# Tests
+test "Orden 123" {
+  given carrito.total=120000
+  expect envio == 0
+}

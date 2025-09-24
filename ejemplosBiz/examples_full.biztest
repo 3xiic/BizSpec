@@ -1,0 +1,37 @@
+# ========================================
+# BizSpec — Ejemplos sencillos
+# ========================================
+
+# === Reglas básicas ===
+rule "Envío gratis" when total >= 100000 then envio = 0
+rule "Envío base"   when envio == null then envio = 5000
+rule "Cliente VIP"  when cliente == "VIP" then descuento = 0.2
+
+# ========================================
+# TESTS
+# ========================================
+
+# 1) Carrito grande → aplica envío gratis
+test "Carrito grande" {
+  given total=120000
+  expect envio == 0
+}
+
+# 2) Carrito pequeño → aplica envío base
+test "Carrito pequeño" {
+  given total=20000
+  expect envio == 5000
+}
+
+# 3) Cliente VIP con carrito pequeño → aplica descuento VIP
+test "Cliente VIP con carrito pequeño" {
+  given total=20000, cliente="VIP"
+  expect descuento == 0.2
+}
+
+# 4) Caso mixto: carrito grande y cliente VIP
+test "Carrito grande VIP" {
+  given total=150000, cliente="VIP"
+  expect envio == 0
+  expect descuento == 0.2
+}
